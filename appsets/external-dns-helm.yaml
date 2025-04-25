@@ -6,20 +6,31 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://charts.bitnami.com/bitnami
+    repoURL: https://kubernetes-sigs.github.io/external-dns
     chart: external-dns
-    targetRevision: "8.8.0"
+    targetRevision: '1.16.1'
     helm:
       values: |
         provider: cloudflare
-        cloudflare.apiTokenSecret.name: cloudflare-api-token
-        cloudflare.apiTokenSecret.key: CF_API_TOKEN
+        # cloudflare:
+        #   apiTokenSecretRef:
+        #     name: cloudflare-api-token
+        #     key: CF_API_TOKEN
+        env:
+          - name: CF_API_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: cloudflare-api-token
+                key: CF_API_TOKEN
         policy: sync
         txtOwnerId: external-dns
         domainFilters:
           - "vidrochka.xyz"
         sources:
           - ingress
+    # helm:
+    #   valueFiles:
+    #     - '/apps/external-dns/values.yaml'
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
