@@ -8,7 +8,6 @@ helmCharts:
     releaseName: cert-manager
     namespace: cert-manager
     valuesFile: values.yaml
-    enableHelm: true
 
 resources:
   - issuer.yaml
